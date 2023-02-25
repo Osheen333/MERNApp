@@ -40,12 +40,13 @@ function Register() {
       const data = await res.json();
       if (res.ok) {
         alert("Registration successful.");
-        window.location.href = "./";
+        navigate("/", { replace: true });
       } else {
-        alert(data.message);
+        alert(data.data);
       }
     } catch (err) {
-      console.error(err);
+      alert("Error");
+      console.error(err.message);
     }
   };
   return (

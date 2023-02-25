@@ -33,6 +33,7 @@ export const AuthProvider = ({ children, userData, userDetailsData }) => {
         alert("Username or Password is incorrect");
       }
     } catch (error) {
+      alert("Error");
       console.error(error);
     }
   };
