@@ -24,7 +24,6 @@ export const AuthProvider = ({ children, userData, userDetailsData }) => {
       });
 
       const data = await response.json();
-      console.log(data);
       if (data.status === "ok") {
         alert("login successful");
         setUser(data.data);

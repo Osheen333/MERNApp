@@ -23,7 +23,6 @@ function Register() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(formData)
     const { name, email, password, confirmPassword } = formData;
     if (password !== confirmPassword) {
       alert("Passwords do not match.");

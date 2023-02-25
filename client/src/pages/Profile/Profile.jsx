@@ -20,23 +20,13 @@ function Profile({data}) {
             token: user,
           }),
         });
-        console.log('one')
         const data = await response.json();
-        console.log('otwone')
-
         await setUserDetails(data.data);
-        console.log('three')
-
-        console.log('hello',userDetails,'heelo')
         if(data.data === 'Token expired'){
-           console.log('four')
-
           alert('Token expired');
           logout();
         }
       } catch (error) {
-        console.log('five')
-
         alert('Error');
         logout();
       }
