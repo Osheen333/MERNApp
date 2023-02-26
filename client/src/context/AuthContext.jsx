@@ -1,13 +1,14 @@
 import React,{ createContext, useContext, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import { useLocalStorage } from "../hooks/useLocalStorage";
+import toast from "react-hot-toast";
 
 const AuthContext = createContext();
 
-export const AuthProvider = ({ children, userData, userDetailsData }) => {
-  const [user, setUser] = useLocalStorage("user", userData);
-  const [userDetails, setUserDetails] =  useLocalStorage("userDetails", userDetailsData);
+export const AuthProvider = ({ children}) => {
+  const [token, setToken] = useLocalStorage("token", null);
   const navigate = useNavigate();
+
   const login = async (email,password) => {
     email = email.trim();
     password = password.trim();
@@ -23,33 +24,33 @@ export const AuthProvider = ({ children, userData, userDetailsData }) => {
         }),
       });
 
+
       const data = await response.json();
       if (data.status === "ok") {
-        alert("login successful");
-        setUser(data.data);
+        toast.success('login successful');
+        setToken(data.data);
         navigate("/profile", { replace: true });
       } else {
-        alert("Username or Password is incorrect");
+        toast.error('Username or Password is incorrect');
       }
     } catch (error) {
-      alert("Error");
-      console.error(error);
+      console.log(error)
+      toast.error('Error! Please try again after some time.');
     }
   };
 
   const logout = () => {
-    setUser(null);
-    setUserDetails(null)
+    setToken(null);
     navigate("/", { replace: true });
   };
 
   const value = useMemo(
     () => ({
-      user,
+      token,
       login,
       logout
     }),
-    [user]
+    [token]
   );
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

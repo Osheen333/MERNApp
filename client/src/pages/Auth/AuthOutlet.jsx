@@ -6,7 +6,7 @@ import Col from "react-bootstrap/Col";
 function AuthOutlet({ children, header }) {
   return (
     <Container fluid>
-      <Row className="justify-content-md-center">
+      <Row className="justify-content-md-center align-items-center">
         <Col xs="6">{children}</Col>
       </Row>
     </Container>

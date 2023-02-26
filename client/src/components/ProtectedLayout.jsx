@@ -1,12 +1,11 @@
-import { Navigate, useOutlet } from "react-router-dom";
+import { Navigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 
 
 export const ProtectedLayout = ({ children }) => {
-  const { user } = useAuth();
-  const outlet = useOutlet();
+  const { token } = useAuth();
 
-  if (!user) {
+  if (!token) {
     // user is not authenticated
     return <Navigate to="/login" />;
   }

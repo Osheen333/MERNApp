@@ -1,48 +1,52 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import Button from "react-bootstrap/Button";
-import {useAuth} from '../../context/AuthContext';
-import { useLocalStorage } from "../../hooks/useLocalStorage";
-function Profile({data}) {
-  const {logout, user} = useAuth();
-  const [userDetails, setUserDetails] =  useLocalStorage("userDetails", data);;
-  useEffect(() => {
-    const fetchUserData = async () => {
-      try {
-        const response = await fetch("http://localhost:8000/api/transactions/user", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            token: user,
-          }),
-        });
-        const data = await response.json();
-        await setUserDetails(data.data);
-        if(data.data === 'Token expired'){
-          alert('Token expired');
-          logout();
-        }
-      } catch (error) {
-        alert('Error');
-        logout();
-      }
-    };
+import Card from "react-bootstrap/Card";
+import toast from "react-hot-toast";
+import useAxios from "axios-hooks";
 
-    fetchUserData();
-  }, []);
+import { useAuth } from "../../context/AuthContext";
+import { useLocalStorage } from "../../hooks/useLocalStorage";
+
+function Profile() {
+  const { logout, token } = useAuth();
+  const [{ data, loading, error }] = useAxios({
+    url: "http://localhost:8000/api/transactions/user",
+    method: "post",
+    data: { token: token },
+  });
+
+  useEffect(() => {
+    console.log(error?.response?.data);
+    if (
+      error?.response?.data &&
+      error?.response?.data?.data === "Token expired"
+    ) {
+      toast.error("Token expired");
+      logout();
+    }
+  }, [error]);
+
   return (
     <Container fluid>
       <Row className="justify-content-md-center">
         <Col xs="6">
-          <h1>Profile</h1>
-          <p>if you want to see the sunshine, you have to weather the storm</p>
-          <h5>Name: {userDetails?.name}</h5>
-          <h5>Email: {userDetails?.email} </h5>
-          <Button onClick={logout}>Logout</Button>
+          <Card style={{ marginTop: "25%" }}>
+            {loading && <p>Loading ...</p>}
+            {!loading && (
+              <Card.Body>
+                <Card.Title>Profile</Card.Title>
+                <p>
+                  if you want to see the sunshine, you have to weather the storm
+                </p>
+                <h5>Name: {data?.data?.name}</h5>
+                <h5>Email: {data?.data?.email} </h5>
+                <Button onClick={logout}>Logout</Button>
+              </Card.Body>
+            )}
+          </Card>
         </Col>
       </Row>
     </Container>
