@@ -34,7 +34,6 @@ export const AuthProvider = ({ children}) => {
         toast.error('Username or Password is incorrect');
       }
     } catch (error) {
-      console.log(error)
       toast.error('Error! Please try again after some time.');
     }
   };
