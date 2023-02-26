@@ -1,17 +1,12 @@
 const catchAsync = require("./../utils/catchAsync");
 const { Model } = require("mongoose");
 const bcrypt = require("bcrypt");
-const jwt = require("jsonwebtoken");
-const JWT_SECRET =
-        "hvdvay6ert72839289()aiyg8t87qt72393293883uhefiuh78ttq3ifi78272jbkj?[]]pou89ywe";
 exports.getUser = (Model) =>
   catchAsync(async (req, res, next) => {
     try {
-      console.log('I am back here')
       const user = req.body.user
       const useremail = user.email;
       const data = await Model.findOne({ email: useremail });
-      console.log(data,'here');
       res.status(201).json({ status: "ok", data: data });
     } catch (error) {
       return res.status(401).send({ data: "Token expired" });
@@ -46,8 +41,5 @@ exports.login = (Model) =>
     if (!passwordMatch) {
       return res.status(404).send({ data: "Invalid password" });
     }
-    const token = jwt.sign({ email: user.email }, JWT_SECRET, {
-      expiresIn: "10s",
-    });
-    res.status(201).json({ status: "ok", data: token });
+    next()
   });
