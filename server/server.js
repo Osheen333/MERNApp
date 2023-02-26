@@ -1,7 +1,7 @@
 const  app = require('./app.js');
 const {connect} = require('./database/connection.js');
 
-const port = process.env.PORT || 8000;
+const {port} = require('./utils/config')
 
 connect().then(() => {
     try {
