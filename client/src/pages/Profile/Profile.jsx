@@ -15,7 +15,8 @@ function Profile() {
   const [{ data, loading, error }] = useAxios({
     url: "http://localhost:8000/api/transactions/user",
     method: "post",
-    data: { token: token },
+    data: {},
+    headers: {authorization:token}
   });
 
   useEffect(() => {

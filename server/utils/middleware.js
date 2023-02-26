@@ -1,12 +1,12 @@
 const jwt = require("jsonwebtoken");
 const {JWT_SECRET} = require('./config')
+
 exports.premiddleware = () => {
     return (req, res, next) => {
         try{
-            const { token } = req.body;
-                        const user =  jwt.verify(token, JWT_SECRET);
+            const {authorization} = req.headers;
+            const user =  jwt.verify(authorization, JWT_SECRET);
             req.body.user = user;
-            console.log(user,'user');
             next();
         }catch(err){
             return res.status(401).send({ data: "Token expired" });
